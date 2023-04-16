@@ -43,7 +43,7 @@ const getGeoData = async (city, country) => {
         return undefined;
     }
 
-    return get(apiURL, "/geo/1.0/direct?", `q=${city ? city : ""}${country && city ? "," : ""}${country ? country : ""}`, apiKey);
+    return await get(apiURL, "/geo/1.0/direct?", `q=${city ? city : ""}${country && city ? "," : ""}${country ? country : ""}`, apiKey);
 }
 
 /**
@@ -57,7 +57,23 @@ const getWeatherData = async (lat, lon) => {
         return undefined;
     }
 
-    return get(apiURL, "/data/2.5/weather?", `lat=${lat}&lon=${lon}&units=metric`, apiKey);
+    return await get(apiURL, "/data/2.5/weather?", `lat=${lat}&lon=${lon}&units=metric`, apiKey);
+}
+
+/**
+ * Creates a HTTP-GET-Request to the Entry Handler to get the last entry
+ * @returns An unhandled HTTP request
+ */
+const getEntryData = async () => {
+    return await fetch("/entry").then(res => res.json());
+}
+
+/**
+ * Creates a HTTP-GET-Request to the Entry Handler to get all entries
+ * @returns An unhandled HTTP request
+ */
+const getAllEntryData = async () => {
+    return await fetch("/all").then(res => res.json());
 }
 
 /**
@@ -66,7 +82,7 @@ const getWeatherData = async (lat, lon) => {
  * @returns An unhandled HTTP request
  */
 const postEntryData = async (data) => {
-    return post("/entry", data);
+    return await post("/entry", data);
 }
 
 
@@ -76,19 +92,36 @@ const postEntryData = async (data) => {
  * Sets the data to the most recent entry
  * @param {Objct}   data    The entry data
  */
-const setEntryData = (data) => {
-    document.getElementById("date").innerHTML = data.date.toUTCString();
-    document.getElementById("temp").innerHTML = data.temp ? data.temp : "";
-    document.getElementById("content").innerHTML = data.content ? data.content : "";
+const createEntryHolder = (data) => {
+    const holder = document.createElement("div");
+    const entries = document.getElementById("entries");
+    holder.className = "entryHolder";
+    for (let prop of [new Date(data.date).toUTCString(), data.temp, data.content]) {
+        const element = document.createElement("div");
+        element.innerHTML = prop;
+        holder.appendChild(element);
+    }
+
+    entries.insertBefore(holder, entries.firstChild);
 } 
 
 
 // Setup App
-document.getElementById("generate").addEventListener("click", () => {
-    const city = document.getElementById("city");
-    const country = document.getElementById("country");
-    const feelings = document.getElementById("feelings");
+const city = document.getElementById("city");
+const country = document.getElementById("country");
+const feelings = document.getElementById("feelings");
 
+document.addEventListener("DOMContentLoaded", () => {
+    getEntryData().then(data => {
+        if (data.hasOwnProperty("date")) {
+            createEntryHolder(data);
+        }
+    })
+});
+
+
+
+document.getElementById("generate").addEventListener("click", () => {
     const geoDataRequest = getGeoData(city.value, country.value);
 
     if (geoDataRequest) {
@@ -102,8 +135,8 @@ document.getElementById("generate").addEventListener("click", () => {
                         content: "Your feelings: " + feelings.value 
                     };
 
-                    setEntryData(data   );
-                    postEntryData(data).then(res => console.log(res)).catch(err => console.log(err));
+                    createEntryHolder(data);
+                    postEntryData(data).catch(err => console.log(err));
                     
 
                 }).catch(err => console.log(err));
