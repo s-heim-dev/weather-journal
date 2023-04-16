@@ -38,12 +38,17 @@ const post = async (route, data) => {
  * @param {string}  country     The country code of the requested location
  * @returns An unhandled HTTP request (serialized from JSON)
  */
-const getGeoData = async (city, country) => {
-    if (!(city || country)) {
+const getGeoData = async (city = "", country = "") => {
+    if (city == "" && country == "") {
         return undefined;
     }
 
-    return await get(apiURL, "/geo/1.0/direct?", `q=${city ? city : ""}${country && city ? "," : ""}${country ? country : ""}`, apiKey);
+    if (isNaN(city)) {
+        return await get(apiURL, "/geo/1.0/direct?", `q=${city},${country}`, apiKey);
+    }
+    else {
+        return await get(apiURL, "/geo/1.0/zip?", `zip=${city},${country}`, apiKey);
+    }    
 }
 
 /**
@@ -105,6 +110,21 @@ const createEntryHolder = (data) => {
     entries.insertBefore(holder, entries.firstChild);
 } 
 
+/**
+ * Prints an error message
+ * @param {Object}  err         The error object
+ * @param {string}  message     The error message (to display to the user)
+ */
+const handleError = (err, message = "An unexpected error occured! (More Information in the Console)") => {
+    if (err) {
+        console.log(err);
+    }
+
+    const element = document.getElementById("error");
+    element.innerHTML = message;
+    element.style.display = "block";
+}
+
 
 // Setup App
 const city = document.getElementById("city");
@@ -136,12 +156,18 @@ document.getElementById("generate").addEventListener("click", () => {
                     };
 
                     createEntryHolder(data);
-                    postEntryData(data).catch(err => console.log(err));
+                    postEntryData(data).catch(err => handleError(err));
                     
 
-                }).catch(err => console.log(err));
+                }).catch(err => handleError(err));
+            }
+            else if (res.hasOwnProperty("cod") && res.cod != 200) {
+                handleError(res, res.message);
+            }
+            else {
+                handleError(null, "Please enter valid location data!");
             }
             
-        }).catch(err => console.log(err));
+        }).catch(err => handleError(err));
     }
 });

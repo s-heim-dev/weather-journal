@@ -5,11 +5,11 @@ body {
 
 #app {
     display: grid;
-    grid-auto-rows: minmax(150px, auto);
     grid-template-columns: 100%;
-    grid-template-rows: 10% 30% 30% 30%;
+    grid-template-rows: 50% 100% 100% 100% 100%;
     grid-template-areas: 
     "hd"
+    "err"
     "loc"
     "feel"
     "ent";
@@ -39,21 +39,30 @@ body {
 }
 
 #headline {
-    grid-area: "hd";
+    grid-area: hd;
     display: flex;
     align-items: center;
 }
 
 #location {
-    grid-area: "loc";
+    grid-area: loc;
 }
 
 #feel {
-    grid-area: "feel";
+    grid-area: feel;
+}
+
+#error {
+    display: none;
+    grid-area: err;
+    min-width: fit-content;
+    max-width: 500px;
+    border: 3px dotted #f0d43a;
+    padding: 5px;
 }
 
 #entry {
-    grid-area: "ent";
+    grid-area: ent;
     background: rgba(59, 74, 107, .4);
 }
 
