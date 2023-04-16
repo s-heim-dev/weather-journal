@@ -11,38 +11,34 @@
     <body>
         <main id="app">
             <div id="headline" class="holder">
-                Weather Journal App
+                <h1>Weather Journal App</h1>
             </div>
 
             <div id="location" class="holder">
-                <div>
+                <div class="input">
                     <label for="city">Enter City here</label>
                     <input type="text" id="city" placeholder="enter city here">
                 </div>
-                <div>
+                <div class="input">
                     <label for="city">Enter Country Code here</label>
                     <input type="text" id="country" placeholder="enter country code here">
                 </div>
             </div>
 
             <div id="feel" class="holder">
-                <div>
+                <div class="input">
                     <label for="feelings">How are you feeling today?</label>
                     <textarea class="myInput" id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
                     
                 </div>
-                <div>
+                <div class="input">
                     <button id="generate"> Generate </button>
                 </div>
             </div>
 
-            <div id="entry" class="holder">
-                <div class="title">Most Recent Entry</div>
-                <div id="entryHolder">
-                    <div id="date"></div> 
-                    <div id="temp"></div>
-                    <div id="content"></div>
-                </div>
+            <div id="entry">
+                <div id="title">Most Recent Entries</div>
+                <div id="entries"></div>
             </div>
         </main>
         <script src="app.js" type="text/javascript"></script>

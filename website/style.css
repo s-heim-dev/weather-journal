@@ -13,7 +13,7 @@ body {
     "loc"
     "feel"
     "ent";
-    height:100vh;
+    min-height:100vh;
     background: #f23557;
     color: #f0d43a;
     justify-content: center;
@@ -25,8 +25,8 @@ body {
 .holder {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-around;
-    align-items: stretch;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .holder > div {
@@ -34,8 +34,14 @@ body {
     width: fit-content;
 }
 
+.input {
+    margin: 5px 2px;
+}
+
 #headline {
     grid-area: "hd";
+    display: flex;
+    align-items: center;
 }
 
 #location {
@@ -51,17 +57,45 @@ body {
     background: rgba(59, 74, 107, .4);
 }
 
-/*  Basic Styling To Override Default For Basic HTML Elements */
-label {
-    display:block;
-    font-size: 27px;
+#title {
+    padding: 5px;
+    margin: 5px;
+}
+
+#entries {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 5px;
+}
+
+.entryHolder {
+    width: 250px;
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #f0d43a;
+}
+
+input, button {
+    width: 400px;
+}
+
+textarea {
+    width: 400px;
+}
+
+textarea {
+    background: #22b2da;
+    color: #f0d43a;
+    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
 }
 
 input {
-    display:block;
+    display: block;
     height: 60px;
-    width: 320px;
-    background:#22b2da;
+    background: #22b2da;
     color: #f0d43a;
     font-size: 20px;
     font-family: 'Oswald', sans-serif;
@@ -69,6 +103,8 @@ input {
 }
 
 label {
+    display: block;
+    font-size: 27px;
     width: fit-content;
 }
 
@@ -83,18 +119,6 @@ button {
     box-shadow: 2px 4px 5px #444;
 }
 
-h1 {
-    font-size: 36px;
-}
-
-textarea{
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
-
-/* Reset style for HTML element on active to have no border*/
 input:focus,
 select:focus,
 textarea:focus,
@@ -102,7 +126,6 @@ button:focus {
     outline: none;
 }
 
-/* Style for Placeholder Text*/
 ::placeholder { /* Firefox, Chrome, Opera */ 
     color: #f0d43a; 
     font-family: 'Oswald', sans-serif;
@@ -120,3 +143,30 @@ button:focus {
     font-family: 'Oswald', sans-serif;
 
 } 
+
+@media(max-width: 450px) {
+    .holder {
+        display: block;
+    }
+    
+    input, button {
+        width: 90vw;
+    }
+
+    textarea {
+        width: 89vw;
+    }
+
+    .entryHolder {
+        width: 90vw;
+    }
+}
+
+@media(max-width: 1000px){
+    .holder {
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        margin: 10px;
+    }
+}
